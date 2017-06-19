@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title> Twitter Home </title>
+</head>
+<body>
+	<h2> Welcome <%= user.firstn.capitalize! %> </h2>
+	<a href="/signout"> Sign Out </a>
+	<form action="/add" method="post">
+		<input type="text" name="mess" placeholder="your tweet here"> <br>
+		<input type="submit" value="Add Tweet">
+	</form>
+	<ul>
+	<% tweets.each do |tweet| %>
+	<li>
+	<% maker=User.all(id: tweet.user_id).first %> 
+	<span style="font-weight: bold"> <%= maker.firstn.capitalize! %> <br> </span>
+	<%= tweet.mess %> <br>
+	likes: <%= tweet.likes %>
+	<form action="/like" method="post">
+	<input type="hidden" name="tweet_id" value="<%= tweet.id %> ">
+	<% liker=Like.all(tweet_id: tweet.id , user_id: user_id ).first %>
+	<% if liker.nil? %>
+	<input type="submit" value="Like">
+	<% elsif liker.stat %>
+	<input type="submit" value="Unlike">
+	<% else %>
+	<input type="submit" value="Like">
+	<% end %>
+	</form>
+	<br>
+	<% end %>
+	</li>
+	</ul>
+</body>
+</html>
